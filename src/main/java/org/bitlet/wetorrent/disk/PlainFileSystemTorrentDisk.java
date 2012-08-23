@@ -229,7 +229,7 @@ public class PlainFileSystemTorrentDisk implements TorrentDisk {
         return pieces.get(index).getCompleted();
     }
 
-    public synchronized boolean isAvaiable(int index, int begin, int length) {
+    public synchronized boolean isAvailable(int index, int begin, int length) {
         return pieces.get(index).isAvaiable(begin, length);
     }
 

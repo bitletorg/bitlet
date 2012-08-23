@@ -47,7 +47,7 @@ public interface TorrentDisk {
 
     public int getDownloaded(int index);
 
-    public boolean isAvaiable(int index, int begin, int length);
+    public boolean isAvailable(int index, int begin, int length);
 
     public long available(int index, int begin);
 
