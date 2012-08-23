@@ -57,9 +57,9 @@ public class Metafile extends Bencode {
     private String infoSha1Encoded;
 
     /** 
-     * Creates a new instance of Metafile 
+     * Creates a new instance of Metafile  
      */
-    public Metafile(InputStream is) throws IOException {
+    public Metafile(InputStream is) throws IOException, NoSuchAlgorithmException {
         super(is);
 
         rootDictionary = (SortedMap) getRootElement();
