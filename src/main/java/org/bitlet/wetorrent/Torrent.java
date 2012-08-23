@@ -71,15 +71,15 @@ public class Torrent extends InterruptableTasksThread {
         return uploadBandwidthLimiter;
     }
 
-    public Torrent(Metafile metafile, TorrentDisk torrentDisk, IncomingPeerListener incomingPeerListener) throws Exception {
+    public Torrent(Metafile metafile, TorrentDisk torrentDisk, IncomingPeerListener incomingPeerListener) {
         this(metafile, torrentDisk, incomingPeerListener, null);
     }
 
-    public Torrent(Metafile metafile, TorrentDisk torrentDisk, IncomingPeerListener incomingPeerListener, BandwidthLimiter uploadBandwidthLimiter) throws Exception {
+    public Torrent(Metafile metafile, TorrentDisk torrentDisk, IncomingPeerListener incomingPeerListener, BandwidthLimiter uploadBandwidthLimiter) {
         this(metafile, torrentDisk, incomingPeerListener, uploadBandwidthLimiter, null);
     }
 
-    public Torrent(Metafile metafile, TorrentDisk torrentDisk, IncomingPeerListener incomingPeerListener, BandwidthLimiter uploadBandwidthLimiter, PieceChooser pieceChooser) throws Exception {
+    public Torrent(Metafile metafile, TorrentDisk torrentDisk, IncomingPeerListener incomingPeerListener, BandwidthLimiter uploadBandwidthLimiter, PieceChooser pieceChooser) {
 
         this.uploadBandwidthLimiter = uploadBandwidthLimiter;
         this.incomingPeerListener = incomingPeerListener;
