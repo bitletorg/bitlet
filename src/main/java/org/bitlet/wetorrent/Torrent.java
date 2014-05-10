@@ -358,7 +358,7 @@ public class Torrent extends InterruptableTasksThread {
     }
 
     public void startDownload() throws Exception {
-        stopped = true;
+        stopped = false;
         Map firstResponseDictionary = trackerRequest("started");
 
         if (firstResponseDictionary == null) {
