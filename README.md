@@ -16,4 +16,4 @@ Where $1 is a .torrent file you have on your filesystem.
 You can review this [annotated example](https://github.com/bitletorg/bitlet/wiki/Annotated-Example) for an overview on how to use the BitLet library.
 
 ## License
-BitLet is distributed under the LGPL 2.0 license. See `src/main/resources/license.txt` for the full license terms.
+BitLet is distributed under the Apache license. See `src/main/resources/license.txt` for the full license terms.
