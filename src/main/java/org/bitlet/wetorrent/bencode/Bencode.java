@@ -40,10 +40,7 @@ public class Bencode {
      * This creates and parse a bencoded InputStream
      */
     public Bencode(InputStream is) throws IOException {
-        if (!is.markSupported()) {
-            throw new IOException("is.markSupported should be true");
-        }
-        rootElement = parse(is);
+        rootElement = parse(readHead(is), is);
     }
 
     /**
@@ -100,16 +97,18 @@ public class Bencode {
         }
     }
 
-    private Object parse(InputStream is) throws IOException {
-        is.mark(0);
-        int readChar = is.read();
-        switch (readChar) {
+    private int readHead(InputStream is) throws IOException {
+        return is.read();
+    }
+
+    private Object parse(int head, InputStream tail) throws IOException {
+        switch (head) {
             case 'i':
-                return parseInteger(is);
+                return parseInteger(readHead(tail), tail);
             case 'l':
-                return parseList(is);
+                return parseList(readHead(tail), tail);
             case 'd':
-                return parseDictionary(is);
+                return parseDictionary(readHead(tail), tail);
             case '0':
             case '1':
             case '2':
@@ -120,8 +119,7 @@ public class Bencode {
             case '7':
             case '8':
             case '9':
-                is.reset();
-                return parseByteString(is);
+                return parseByteString(head, tail);
             default:
                 throw new IOException("Problem parsing bencoded file");
         }
@@ -135,75 +133,64 @@ public class Bencode {
         this.rootElement = rootElement;
     }
 
-    private Long parseInteger(InputStream is) throws IOException {
-
-        int readChar = is.read();
+    private Long parseInteger(int head, InputStream tail) throws IOException {
 
         StringBuffer buff = new StringBuffer();
         do {
-            if (readChar < 0) {
+            if (head < 0) {
                 throw new IOException("Unexpected EOF found");
             }
-            buff.append((char) readChar);
-            readChar = is.read();
-        } while (readChar != 'e');
+            buff.append((char) head);
+            head = readHead(tail);
+        } while (head != 'e');
 
         // System.out.println("Loaded int: " + buff);
         return Long.parseLong(buff.toString());
     }
 
-    private List<Object> parseList(InputStream is) throws IOException {
+    private List<Object> parseList(int head, InputStream tail) throws IOException {
 
         List<Object> list = new LinkedList<Object>();
-        is.mark(0);
-        int readChar = is.read();
-        while (readChar != 'e') {
-            if (readChar < 0) {
+        while (head != 'e') {
+            if (head < 0) {
                 throw new IOException("Unexpected EOF found");
             }
-            is.reset();
-            list.add(parse(is));
-            is.mark(0);
-            readChar = is.read();
+            list.add(parse(head, tail));
+            head = readHead(tail);
         }
 
         return list;
     }
 
-    private SortedMap parseDictionary(InputStream is) throws IOException {
+    private SortedMap parseDictionary(int head, InputStream tail) throws IOException {
         SortedMap<ByteBuffer, Object> map = new TreeMap<ByteBuffer, Object>(new DictionaryComparator());
-        is.mark(0);
-        int readChar = is.read();
-        while (readChar != 'e') {
-            if (readChar < 0) {
+        while (head != 'e') {
+            if (head < 0) {
                 throw new IOException("Unexpected EOF found");
             }
-            is.reset();
-            map.put(parseByteString(is), parse(is));
-            is.mark(0);
-            readChar = is.read();
+            ByteBuffer key = parseByteString(head, tail);
+            map.put(key, parse(readHead(tail), tail));
+            head = readHead(tail);
         }
 
         return map;
     }
 
-    private ByteBuffer parseByteString(InputStream is) throws IOException {
-
-        int readChar = is.read();
+    private ByteBuffer parseByteString(int head, InputStream tail) throws IOException {
 
         StringBuffer buff = new StringBuffer();
         do {
-            if (readChar < 0) {
+            if (head < 0) {
                 throw new IOException("Unexpected EOF found");
             }
-            buff.append((char) readChar);
-            readChar = is.read();
-        } while (readChar != ':');
+            buff.append((char) head);
+            head = readHead(tail);
+        } while (head != ':');
         Integer length = Integer.parseInt(buff.toString());
 
         byte[] byteString = new byte[length];
         for (int i = 0; i < byteString.length; i++) {
-            byteString[i] = (byte) is.read();
+            byteString[i] = (byte) readHead(tail);
         // System.out.println("Loaded string: " + new String(byteString));
         }
         return ByteBuffer.wrap(byteString);
