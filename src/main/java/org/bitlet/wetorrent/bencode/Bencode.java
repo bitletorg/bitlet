@@ -17,8 +17,7 @@
 
 /**
  * This is just a little class that lets you read and write bencoded files.
- * It uses List, Map, Long, and ByteBuffer in memory to represents data
- *
+ * It uses List, Map, Long, and ByteBuffer in memory to represent data
  */
 package org.bitlet.wetorrent.bencode;
 

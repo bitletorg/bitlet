@@ -49,8 +49,8 @@ public class Metafile extends Bencode {
     private byte[] infoSha1;
     private String infoSha1Encoded;
 
-    /** 
-     * Creates a new instance of Metafile  
+    /**
+     * Creates a new instance of Metafile
      */
     public Metafile(InputStream is) throws IOException, NoSuchAlgorithmException {
         super(is);
@@ -223,5 +223,5 @@ public class Metafile extends Bencode {
 
     public boolean isSingleFile() {
         return (getFiles().size() == 0);
-}
+    }
 }
