@@ -58,7 +58,6 @@ public class Metafile extends Bencode {
         rootDictionary = (SortedMap) getRootElement();
         info = (SortedMap) rootDictionary.get(ByteBuffer.wrap("info".getBytes()));
 
-
         pieceLength = (Long) info.get(ByteBuffer.wrap("piece length".getBytes()));
 
         byte[] piecesByteString = ((ByteBuffer) info.get(ByteBuffer.wrap("pieces".getBytes()))).array();
@@ -68,9 +67,7 @@ public class Metafile extends Bencode {
             piecesSha.add(sha1);
         }
 
-
         name = new String(((ByteBuffer) info.get(ByteBuffer.wrap("name".getBytes()))).array());
-
 
         length = (Long) info.get(ByteBuffer.wrap("length".getBytes()));
 
@@ -180,13 +177,10 @@ public class Metafile extends Bencode {
         Bencode bencode = new Bencode();
         bencode.setRootElement(info);
 
-
         MessageDigest md = MessageDigest.getInstance("SHA1");
-
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         bencode.print(out);
-
 
         md.update(ByteBuffer.wrap(out.toByteArray()));
 
@@ -202,7 +196,6 @@ public class Metafile extends Bencode {
             infoSha1Encoded = Utils.byteArrayToURLString(getInfoSha1());
         }
         return infoSha1Encoded;
-
     }
 
     public long getLength() {
