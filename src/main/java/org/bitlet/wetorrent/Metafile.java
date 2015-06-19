@@ -17,6 +17,8 @@
 
 package org.bitlet.wetorrent;
 
+import static org.bitlet.wetorrent.util.Utils.toByteBuffer;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,44 +58,44 @@ public class Metafile extends Bencode {
         super(is);
 
         rootDictionary = (SortedMap) getRootElement();
-        info = (SortedMap) rootDictionary.get(ByteBuffer.wrap("info".getBytes()));
+        info = (SortedMap) rootDictionary.get(toByteBuffer("info"));
 
-        pieceLength = (Long) info.get(ByteBuffer.wrap("piece length".getBytes()));
+        pieceLength = (Long) info.get(toByteBuffer("piece length"));
 
-        byte[] piecesByteString = ((ByteBuffer) info.get(ByteBuffer.wrap("pieces".getBytes()))).array();
+        byte[] piecesByteString = ((ByteBuffer) info.get(toByteBuffer("pieces"))).array();
         for (int i = 0; i < piecesByteString.length; i += 20) {
             byte[] sha1 = new byte[20];
             System.arraycopy(piecesByteString, i, sha1, 0, 20);
             piecesSha.add(sha1);
         }
 
-        name = new String(((ByteBuffer) info.get(ByteBuffer.wrap("name".getBytes()))).array());
+        name = new String(((ByteBuffer) info.get(toByteBuffer("name"))).array());
 
-        length = (Long) info.get(ByteBuffer.wrap("length".getBytes()));
+        length = (Long) info.get(toByteBuffer("length"));
 
-        List files = (List) info.get(ByteBuffer.wrap("files".getBytes()));
+        List files = (List) info.get(toByteBuffer("files"));
         if (files != null) {
             length = new Long(0);
             for (Object fileObj : files) {
                 Map file = (Map) fileObj;
                 this.files.add(file);
-                length += (Long) file.get(ByteBuffer.wrap("length".getBytes()));
+                length += (Long) file.get(toByteBuffer("length"));
             }
         }
 
-        byte[] announceByteString = ((ByteBuffer) rootDictionary.get(ByteBuffer.wrap("announce".getBytes()))).array();
+        byte[] announceByteString = ((ByteBuffer) rootDictionary.get(toByteBuffer("announce"))).array();
         if (announceByteString != null) {
             announce = new String(announceByteString);
         }
-        announceList = (List) rootDictionary.get(ByteBuffer.wrap("announce-list".getBytes()));
+        announceList = (List) rootDictionary.get(toByteBuffer("announce-list"));
 
-        creationDate = (Long) rootDictionary.get(ByteBuffer.wrap("creation date".getBytes()));
+        creationDate = (Long) rootDictionary.get(toByteBuffer("creation date"));
 
-        ByteBuffer commentByteBuffer = (ByteBuffer) rootDictionary.get(ByteBuffer.wrap("comment".getBytes()));
+        ByteBuffer commentByteBuffer = (ByteBuffer) rootDictionary.get(toByteBuffer("comment"));
         if (commentByteBuffer != null) {
             comment = new String(commentByteBuffer.array());
         }
-        ByteBuffer createdByByteBuffer = (ByteBuffer) rootDictionary.get(ByteBuffer.wrap("created by".getBytes()));
+        ByteBuffer createdByByteBuffer = (ByteBuffer) rootDictionary.get(toByteBuffer("created by"));
         if (createdByByteBuffer != null) {
             createdBy = new String(createdByByteBuffer.array());
         }
@@ -104,7 +106,7 @@ public class Metafile extends Bencode {
         rootDictionary = new TreeMap(new DictionaryComparator());
         setRootElement(rootDictionary);
         info = new TreeMap(new DictionaryComparator());
-        rootDictionary.put(ByteBuffer.wrap("info".getBytes()), getInfo());
+        rootDictionary.put(toByteBuffer("info"), getInfo());
         announceList = new LinkedList();
     }
 

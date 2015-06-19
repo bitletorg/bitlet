@@ -17,6 +17,8 @@
 
 package org.bitlet.wetorrent;
 
+import static org.bitlet.wetorrent.util.Utils.toByteBuffer;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -75,7 +77,7 @@ public class Tracker {
         Map responseDictionary = (Map) trackerResponse.getRootElement();
 
         byte[] failureReasonByteString = null;
-        ByteBuffer failureReasonByteBuffer = (ByteBuffer) responseDictionary.get(ByteBuffer.wrap("failure reason".getBytes()));
+        ByteBuffer failureReasonByteBuffer = (ByteBuffer) responseDictionary.get(toByteBuffer("failure reason"));
         if (failureReasonByteBuffer != null) {
             failureReasonByteString = failureReasonByteBuffer.array();
         }
@@ -89,7 +91,7 @@ public class Tracker {
 
         try {
             byte[] warningMessageByteString = null;
-            ByteBuffer warningMessageByteBuffer = (ByteBuffer) responseDictionary.get(ByteBuffer.wrap("warning message".getBytes()));
+            ByteBuffer warningMessageByteBuffer = (ByteBuffer) responseDictionary.get(toByteBuffer("warning message"));
             if (warningMessageByteBuffer != null) {
                 warningMessageByteString = warningMessageByteBuffer.array();
             }
@@ -103,7 +105,7 @@ public class Tracker {
         }
 
         byte[] trackerIdByteString = null;
-        ByteBuffer trackerIdByteBuffer = (ByteBuffer) responseDictionary.get(ByteBuffer.wrap("tracker id".getBytes()));
+        ByteBuffer trackerIdByteBuffer = (ByteBuffer) responseDictionary.get(toByteBuffer("tracker id"));
         if (trackerIdByteBuffer != null) {
             trackerIdByteString = trackerIdByteBuffer.array();
         }
@@ -114,10 +116,10 @@ public class Tracker {
             }
         }
 
-        interval = (Long) responseDictionary.get(ByteBuffer.wrap("interval".getBytes()));
-        minInterval = (Long) responseDictionary.get(ByteBuffer.wrap("min interval".getBytes()));
-        complete = (Long) responseDictionary.get(ByteBuffer.wrap("complete".getBytes()));
-        incomplete = (Long) responseDictionary.get(ByteBuffer.wrap("incomplete".getBytes()));
+        interval = (Long) responseDictionary.get(toByteBuffer("interval"));
+        minInterval = (Long) responseDictionary.get(toByteBuffer("min interval"));
+        complete = (Long) responseDictionary.get(toByteBuffer("complete"));
+        incomplete = (Long) responseDictionary.get(toByteBuffer("incomplete"));
 
         return responseDictionary;
     }

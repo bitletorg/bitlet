@@ -17,6 +17,8 @@
 
 package org.bitlet.wetorrent;
 
+import static org.bitlet.wetorrent.util.Utils.toByteBuffer;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -277,10 +279,10 @@ public class Torrent extends InterruptableTasksThread {
             List peersList = (List) peers;
             for (Object elem : peersList) {
                 Map peerMap = (Map) elem;
-                ByteBuffer addressByteBuffer = (ByteBuffer) peerMap.get(ByteBuffer.wrap("ip".getBytes()));
+                ByteBuffer addressByteBuffer = (ByteBuffer) peerMap.get(toByteBuffer("ip"));
                 InetAddress address = InetAddress.getByName(new String(addressByteBuffer.array()));
-                int port = ((Long) peerMap.get(ByteBuffer.wrap("port".getBytes()))).intValue();
-                ByteBuffer peerIdByteByteBuffer = (ByteBuffer) peerMap.get(ByteBuffer.wrap("peer id".getBytes()));
+                int port = ((Long) peerMap.get(toByteBuffer("port"))).intValue();
+                ByteBuffer peerIdByteByteBuffer = (ByteBuffer) peerMap.get(toByteBuffer("peer id"));
                 byte[] peerIdByteString = peerIdByteByteBuffer.array();
 
                 if (Torrent.verbose) {
@@ -327,7 +329,7 @@ public class Torrent extends InterruptableTasksThread {
 
             if (!stopped) {
                 try {
-                    Object peers = trackerRequest(null).get(ByteBuffer.wrap("peers".getBytes()));
+                    Object peers = trackerRequest(null).get(toByteBuffer("peers"));
                     if (peers != null) {
                         addPeers(peers);
                     }
@@ -365,7 +367,7 @@ public class Torrent extends InterruptableTasksThread {
             throw new Exception("Problem while sending tracker request");
         }
 
-        Object peers = firstResponseDictionary.get(ByteBuffer.wrap("peers".getBytes()));
+        Object peers = firstResponseDictionary.get(toByteBuffer("peers"));
 
         addPeers(peers);
     }

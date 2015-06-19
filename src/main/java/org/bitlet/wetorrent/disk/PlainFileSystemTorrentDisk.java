@@ -17,6 +17,8 @@
 
 package org.bitlet.wetorrent.disk;
 
+import static org.bitlet.wetorrent.util.Utils.toByteBuffer;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -104,7 +106,7 @@ public class PlainFileSystemTorrentDisk implements TorrentDisk {
 
             for (Object elem : metafile.getFiles()) {
                 Map file = (Map) elem;
-                List path = (List) file.get(ByteBuffer.wrap("path".getBytes()));
+                List path = (List) file.get(toByteBuffer("path"));
                 String pathName = "";
 
                 Iterator pathIterator = path.iterator();
@@ -120,7 +122,7 @@ public class PlainFileSystemTorrentDisk implements TorrentDisk {
                 pathName += "/" + new String((byte[])pathElem );*/
 
 
-                Long length = (Long) file.get(ByteBuffer.wrap("length".getBytes()));
+                Long length = (Long) file.get(toByteBuffer("length"));
                 File persistentFile = new File(saveDirectory.getAbsolutePath() + pathName);
                 if (persistentFile.exists()) {
                     resume = true;
