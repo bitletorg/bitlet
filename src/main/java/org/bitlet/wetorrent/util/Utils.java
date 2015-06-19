@@ -18,11 +18,13 @@
 package org.bitlet.wetorrent.util;
 
 import java.io.StringWriter;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.FieldPosition;
 import java.text.NumberFormat;
 
-public class Utils {
+public final class Utils {
 
     public static String byteArrayToURLString(byte in[]) {
         byte ch = 0x00;
@@ -235,4 +237,10 @@ public class Utils {
             return sb + " GB";
         }
     }
+
+    public static ByteBuffer toByteBuffer(String input) {
+        return ByteBuffer.wrap(input.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private Utils() { }
 }

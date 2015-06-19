@@ -17,10 +17,11 @@
 
 package org.bitlet.wetorrent;
 
+import static org.bitlet.wetorrent.util.Utils.toByteBuffer;
+
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,10 +41,10 @@ public class MetafileTest {
 
     List announceList = new LinkedList();
     List firstList = new LinkedList();
-    firstList.add(ByteBuffer.wrap("http://torrent.ubuntu.com:6969/announce".getBytes()));
+    firstList.add(toByteBuffer("http://torrent.ubuntu.com:6969/announce"));
     announceList.add(firstList);
     List secondList = new LinkedList();
-    secondList.add(ByteBuffer.wrap("http://ipv6.torrent.ubuntu.com:6969/announce".getBytes()));
+    secondList.add(toByteBuffer("http://ipv6.torrent.ubuntu.com:6969/announce"));
     announceList.add(secondList);
     assertEquals(announceList, metafile.getAnnounceList());
     assertEquals("Ubuntu CD releases.ubuntu.com", metafile.getComment());
