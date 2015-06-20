@@ -14,7 +14,6 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.bitlet.wetorrent;
 
 import static org.bitlet.wetorrent.util.Utils.toByteBuffer;
@@ -29,6 +28,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+/** Unit tests for {@link Metafile}. */
 public class MetafileTest {
 
   private static String TEST_TORRENT_PATH = "/ubuntu-15.04-desktop-amd64.iso.torrent";
