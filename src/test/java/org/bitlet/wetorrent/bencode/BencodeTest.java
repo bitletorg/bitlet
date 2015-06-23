@@ -19,6 +19,7 @@ package org.bitlet.wetorrent.bencode;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -47,5 +48,20 @@ public class BencodeTest {
     List<Long> list = (List<Long>) result.get(toByteBuffer("list"));
     assertEquals(1L, list.get(0).longValue());
     assertEquals(2L, list.get(1).longValue());
+  }
+  
+  @Test
+  public void testPrint() throws Exception {
+    Map source = new TreeMap();
+    source.put(toByteBuffer("str"), toByteBuffer("spam"));
+    source.put(toByteBuffer("num"), 42L);
+    source.put(toByteBuffer("list"), Arrays.asList(1L, 2L));
+    Bencode bencode = new Bencode();
+    bencode.setRootElement(source);
+    ByteArrayOutputStream testStream = new ByteArrayOutputStream();
+    bencode.print(testStream);
+    String result = testStream.toString(StandardCharsets.UTF_8.name());
+    String expected = "d4:listli1ei2ee3:numi42e3:str4:spame";
+    assertEquals(expected, result);
   }
 }
