@@ -20,6 +20,8 @@ import static org.bitlet.wetorrent.util.Utils.toByteBuffer;
 
 import org.junit.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -38,7 +40,6 @@ public class MetafileTest {
     InputStream stream = MetafileTest.class.getResourceAsStream(TEST_TORRENT_PATH);
     Metafile metafile = new Metafile(stream);
     assertEquals("http://torrent.ubuntu.com:6969/announce", metafile.getAnnounce());
-
     List announceList = new LinkedList();
     List firstList = new LinkedList();
     firstList.add(toByteBuffer("http://torrent.ubuntu.com:6969/announce"));
@@ -56,5 +57,17 @@ public class MetafileTest {
     assertEquals("ubuntu-15.04-desktop-amd64.iso", metafile.getName());
     assertEquals(524288L, metafile.getPieceLength().longValue());
     assertEquals(2196, metafile.getPieces().size());
+  }
+  
+  @Test
+  public void updateManifestComment() throws Exception {
+    InputStream stream = MetafileTest.class.getResourceAsStream(TEST_TORRENT_PATH);
+    Metafile metafile = new Metafile(stream);
+    metafile.setComment("foo");
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    metafile.print(outputStream);
+    ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+    Metafile metafileWithUpdatedFields = new Metafile(inputStream);
+    assertEquals("foo", metafile.getComment());
   }
 }
